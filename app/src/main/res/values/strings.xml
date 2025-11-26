@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Practice1</string>
+    <string name="counter">6</string>
+    <string name="plus">Увеличить на 1</string>
+    <string name="minus">Уменьшить на 1</string>
+    <string name="sbros">Сбросить</string>
 </resources>
