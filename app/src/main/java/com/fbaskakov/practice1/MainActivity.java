@@ -24,6 +24,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private TextView Counter;
+    private static final String KEY_COUNTER = "counter";
     private int count = 0;
     private int pcount = 0;
     private ArrayList<String> historyList = new ArrayList<String>();
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         setupListView();
         ClickButton();
+
+        if (savedInstanceState != null) {
+            onPushSave(savedInstanceState);
+        }
     }
     private void initViews() {
         Counter = (TextView) findViewById(R.id.counter);
@@ -56,13 +61,16 @@ public class MainActivity extends AppCompatActivity {
         ListViewHistory = findViewById(R.id.listView);
 
     }
+    private void updateCounter() {
+        Counter.setText(String.valueOf(count));
+    }
     private void ClickButton() {
         ButtonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pcount = count;
                 count++;
-                Counter.setText(String.valueOf(count));
+                updateCounter();
                 ListAdd(pcount);
             }
         });
@@ -71,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pcount = count;
                 count--;
-                Counter.setText(String.valueOf(count));
+                updateCounter();
                 ListAdd(pcount);
             }
         });
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pcount = count;
                 count = 0;
-                Counter.setText(String.valueOf(count));
+                updateCounter();
                 ListAdd(pcount);
             }
         });
@@ -98,6 +106,20 @@ public class MainActivity extends AppCompatActivity {
     private void setupListView() {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, historyList);
         ListViewHistory.setAdapter(adapter);
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_COUNTER, count);
+    }
+
+    private void pushSave(Bundle savedInstanceState) {
+        count = savedInstanceState.getInt(KEY_COUNTER, 0);
+        updateCounter();
+    }
+    private void onPushSave(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        pushSave(savedInstanceState);
     }
 
 }
