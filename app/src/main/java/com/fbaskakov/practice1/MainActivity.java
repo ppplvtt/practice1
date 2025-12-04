@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView Counter;
     private static final String KEY_COUNTER = "counter";
+    private static final String KEY_HISTORY = "history";
     private int count = 0;
     private int pcount = 0;
     private ArrayList<String> historyList = new ArrayList<String>();
@@ -111,10 +112,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_COUNTER, count);
+        outState.putStringArrayList(KEY_HISTORY, historyList);
     }
 
     private void pushSave(Bundle savedInstanceState) {
         count = savedInstanceState.getInt(KEY_COUNTER, 0);
+        ArrayList<String> savedHistory = savedInstanceState.getStringArrayList(KEY_HISTORY);
+        if (savedHistory != null) {
+            historyList.clear();
+            historyList.addAll(savedHistory);
+            adapter.notifyDataSetChanged();
+        }
+
         updateCounter();
     }
     private void onPushSave(Bundle savedInstanceState) {
